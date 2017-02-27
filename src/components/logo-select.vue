@@ -28,7 +28,10 @@ export default {
                 imgSrc:require('../assets/baidu_logo.png')
             },{
                 imgSrc:require('../assets/sougou_logo.png')
-            }]
+            },{
+                imgSrc:require('../assets/yahoo.gif')
+            }
+            ]
         }
     },
     methods: {

@@ -43,14 +43,19 @@ export default {
             searchIndex: 0,
             logoData: [{
                 name: '360搜索',
-                searchSrc: 'https://www.so.com/s?ie=utf-8&shb=1&src=360sou_newhome&q='
+                searchSrc: 'https://sug.so.360.cn/suggest?word='
             }, {
                 name: '百度搜索',
-                searchSrc: 'https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=0&rsv_idx=1&tn=baidu&wd='
+                searchSrc: 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su?wd='
             }, {
                 name: '搜狗搜索',
-                searchSrc: 'https://www.sogou.com/web?query='
-            }]
+                searchSrc: 'https://www.sogou.com/suggnew/ajajjson?key='
+            }, {
+                 name:'雅虎搜索',
+                 searchSrc:'http://assist.search.yahooapis.jp/AssistSearchService/V1/webassistSearch?p='
+            }
+
+            ]
         }
     },
     methods: {
@@ -60,8 +65,46 @@ export default {
             if (ev.keyCode == 38 || ev.keyCode == 40) {
                 return;
             }
+            let url = null;
+            const s = this;
 
-            this.$http.jsonp('https://sug.so.360.cn/suggest?word=' + this.keyword + '&encodein=utf-8&encodeout=utf-8').then(function(res) {
+            function callBack(res){
+            console.log('response ====>',res)
+                s.myData = res.bodyText.s;
+            }
+
+            switch(this.searchIndex){
+              case 0:{
+              url = this.logoData[this.searchIndex].searchSrc+this.keyword+'&encodein=utf-8&encodeout=utf-8';
+              break;
+              };
+              case 1:{
+
+
+              url = this.logoData[this.searchIndex].searchSrc+this.keyword+'&json=1&p=3&sid=1457_21100_17001_22037_22177&req=2&bs=switch%20case%20js&pbs=12306&csor=5&pwd=1222&cb=callBack&_=1488190170804';
+              break;
+              };
+              case 2:{
+
+              url = this.logoData[this.searchIndex].searchSrc+this.keyword+'&type=web&ori=yes&pr=web&abtestid=7&ipn=&t=1488190615570&suguuid=e27d6fe1-26c4-4269-9b87-4f0988c08b86&ip=36.110.74.98&iploc=1100&suid=624A6E244C6C860A5820568E0005AB34&yyid=null&pid=sogou&policyno=null&mfp=null&hs=https&mp=1&prereq_a=';
+              break;
+              };
+              case 3:{
+              111
+              url = this.logoData[this.searchIndex].searchSrc+this.keyword+'&output=iejson&callback=callBack&eappid=.XyeWYqtmby4bTtLLwzMrmSGASfEJs0.UwFNWgOE8.ViCzniNnfiYon1jFkTBuo3SzG8dowWhLJSFvs5ocn6RSM0WWg28CJOe6j.dJsa9JOPoreaqq4fTqACXfhLbyTE8O7Gfp3G6EDwTvCxVLMS';
+              break;
+              }
+              default: {
+              url = this.logoData[this.searchIndex].searchSrc+this.keyword;
+              break;
+              }
+
+
+            }
+            console.log(url)
+
+            this.$http.jsonp(url).then(function(res) {
+            console.log('json ====>response',res)
                 this.myData = res.data.s;
             });
         },
@@ -99,6 +142,7 @@ export default {
             });
         },
         getIndex: function(index) {
+            console.log(index)
             this.searchIndex = index;
         }
     }
